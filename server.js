@@ -51,7 +51,7 @@ app.post("/register", async (req, res) => {
 //login
 
 app.post("/login", async (req, res) => {
-  const { Username, password } = req.body;
+  const { Username, Password } = req.body;
 
   try {
     // Find the user by email
@@ -64,7 +64,7 @@ app.post("/login", async (req, res) => {
     }
 
     // Compare the provided password with the stored password
-    if (student.password !== password) {
+    if (student.Password !== Password) {
       return res
         .status(401)
         .json({ message: "Authentication failed. Incorrect password." });
