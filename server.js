@@ -24,9 +24,10 @@ app.get("/", (req, res) => {
   res.send("SUCCESS");
 });
 //student grade
-app.get("/student-grades", async (req, res) => {
+app.get("/student-grades/:ID", async (req, res) => {
   try {
-    const studentGrade = await Student_Grade.find({});
+    const ID = req.params.ID;
+    const studentGrade = await Student_Grade.find({ ID: ID });
     res.status(200).json(studentGrade);
   } catch (error) {
     res.status(500).json({ message: error.message });
