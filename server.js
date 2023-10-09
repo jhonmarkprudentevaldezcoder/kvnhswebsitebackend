@@ -1,12 +1,11 @@
 const express = require("express");
 const cors = require("cors");
-const httpProxy = require("http-proxy");
 const mongoose = require("mongoose");
 const Student = require("./models/studentModel");
+const Student_Grade = require("./models/studentGradesModel");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const app = express();
-const proxy = httpProxy.createProxyServer();
 
 app.use(cookieParser());
 app.use(express.json());
@@ -23,6 +22,15 @@ app.use((req, res, next) => {
 //default route
 app.get("/", (req, res) => {
   res.send("SUCCESS");
+});
+//grades
+app.get("/student-grades", async (req, res) => {
+  try {
+    const studentGrade = await Student_Grade.find({});
+    res.status(200).json(studentGrade);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 // fetch all students
@@ -97,40 +105,6 @@ app.post("/login", async (req, res) => {
     console.log(error.message);
     res.status(500).json({ message: "Internal server error" });
   }
-});
-
-//check authentication
-
-function authenticateToken(req, res, next) {
-  // Get the token from the request headers
-  const token = req.headers.authorization;
-
-  if (!token || !token.startsWith("Bearer ")) {
-    return res
-      .status(401)
-      .json({ message: "Unauthorized. Missing or invalid token." });
-  }
-
-  try {
-    // Verify the token
-    const decoded = jwt.verify(token.replace("Bearer ", ""), "your-secret-key");
-
-    // Attach the decoded user information to the request object
-    req.patient = decoded;
-
-    // Continue to the next middleware
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: "Unauthorized. Invalid token." });
-  }
-}
-
-app.get("/protected", authenticateToken, (req, res) => {
-  // If the middleware passes, the user is authenticated
-  // You can access the user information from req.user
-  res.status(200).json({
-    message: "Protected resource accessed by user: " + req.patient.userId,
-  });
 });
 
 mongoose.set("strictQuery", false);
