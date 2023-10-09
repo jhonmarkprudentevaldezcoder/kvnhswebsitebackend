@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
   res.send("SUCCESS");
 });
-//grades
+//student grade
 app.get("/student-grades", async (req, res) => {
   try {
     const studentGrade = await Student_Grade.find({});
