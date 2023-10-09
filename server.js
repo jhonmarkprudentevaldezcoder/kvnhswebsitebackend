@@ -37,11 +37,11 @@ app.get("/students", async (req, res) => {
 
 //register
 app.post("/register", async (req, res) => {
-  const { email } = req.body;
+  const { Email } = req.body;
 
   try {
     // Check if the email is already taken
-    const existingUser = await Student.findOne({ email });
+    const existingUser = await Student.findOne({ Email });
 
     if (existingUser) {
       return res.status(400).json({ message: "Email already taken." });
