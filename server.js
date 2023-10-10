@@ -16,6 +16,7 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:3000",
     "https://kvnhswebsite.vercel.app",
+    "https://kvnshapi.onrender.com/login",
   ];
 
   const origin = req.headers.origin;
